@@ -19,6 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             if ($user && password_verify($password, $user['password'])) {
                 $_SESSION["id"] =  $user['id'];
+                $_SESSION['time'] = time();
                 header('Location: home.php');
                 exit();
             } else {
@@ -55,11 +56,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <form action="login.php" method="post" class="auth-form">
                 <label>
                     メールアドレス
-                    <input type="text" name="email" value="<?= htmlspecialchars($_POST['user_id'] ?? '', ENT_QUOTES, 'UTF-8') ?>" required autofocus>
+                    <input type="text" name="email" value="<?= htmlspecialchars($_POST['email'] ?? '', ENT_QUOTES, 'UTF-8') ?>" required autofocus>
                 </label>
                 <label>
                     パスワード
-                    <input type="password" name="password" required>
+                    <input type="password" name="password" value="<?= htmlspecialchars($_POST['password'] ?? '', ENT_QUOTES, 'UTF-8') ?>" required>
                 </label>
                 
                 <div class="auth-actions">

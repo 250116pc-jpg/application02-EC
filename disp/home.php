@@ -4,8 +4,23 @@ require_once '../db.php';
 $row = 10;
 $col = 5;
 $error = "";
+$pdo = getPdo();
 
+// 1. ログインチェック
+if (isset($_SESSION['id']) && $_SESSION["time"] + 3600 > time()) {
+    $_SESSION["time"] = time();
+    $id = $_SESSION['id'];
+    $stmt = $pdo->prepare('SELECT * FROM users WHERE id=?');
+    
+    $stmt->execute([$id]);
+    $member = $stmt->fetch();
+} else {
+    // ログインしてなければ戻す
+   
 
+    header('Location: login.php');
+    exit();
+}
 
 ?>
 <!DOCTYPE html>
