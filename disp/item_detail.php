@@ -5,19 +5,13 @@ require_once '../funcs.php';
 
 login_check();
 $error = "";
-if (isset($_SESSION['id']) && $_SESSION["time"] + 3600 > time()) {
-    $_SESSION["time"] = time();
-    $id = $_SESSION['id'];
-    $pdo = getPdo();
-    $stmt = $pdo->prepare('SELECT * FROM users WHERE id=?');
-    
-    $stmt->execute([$id]);
-    $member = $stmt->fetch();
-} else {
-    // ログインしてなければ戻す
-    header('Location: login.php');
-    exit();
-}
+$id = $_SESSION['id'];
+$pdo = getPdo();
+$stmt = $pdo->prepare('SELECT * FROM users WHERE id=?');
+
+$stmt->execute([$id]);
+$member = $stmt->fetch();
+
 if(!empty($_REQUEST["id"])){
     $id = $_REQUEST["id"];
     
@@ -74,7 +68,7 @@ if(!empty($_POST["item_id"])) {
             header('Location: cart.php');
             exit();
         } catch (PDOException $e) {
-            $error = "カートに追加できませんでした。";
+            $error = "うーん";
         }
     }else{
         header('Location: home.php');
