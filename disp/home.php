@@ -41,6 +41,9 @@ $error = "";
                 <div class="auth-links">
                     <a href="cart.php">カート画面へ</a>
                 </div>
+                <div class="auth-links">
+                    <a href="login.php">ログアウトへ</a>
+                </div>
             </p>
             <div>商品一覧</div>
             <?php for ($i = 0; $i < $row; $i++) { ?>
