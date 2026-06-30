@@ -7,13 +7,13 @@ $cart = $_SESSION['cart'] ?? [];
 <head>
     <meta charset="utf-8">
     <title>購入手続き画面</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="auth.css">
-    <link rel="icon" type="image/jpeg" href="favicon.jpg">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../auth.css">
+    <link rel="icon" type="image/jpeg" href="../favicon.jpg">
 </head>
 <body class="auth-page">
     <header class="auth-header" style="display:flex; justify-content:center; align-items:center; flex-direction:column; margin-bottom: 40px;">
-        <img src="logo.png" alt="Logo" style="height: 80px; width: auto; margin-bottom: 20px;">
+        <img src="../logo.png" alt="Logo" style="height: 80px; width: auto; margin-bottom: 20px;">
         <h1 style="margin: 0; font-size: 28px;">購入手続き画面</h1>
     </header>
 
@@ -58,8 +58,8 @@ $cart = $_SESSION['cart'] ?? [];
             </form>
 
             <div class="auth-links" style="margin-top: 30px;">
-                <a href="cart.php">カート一覧画面へ戻る</a><br>
-                <a href="home.php">ホーム画面へ</a>
+                <a href="../cart.php">カート一覧画面へ戻る</a><br>
+                <a href="../home.php">ホーム画面へ</a>
             </div>
 
         </section>
