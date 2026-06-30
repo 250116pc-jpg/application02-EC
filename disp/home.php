@@ -44,7 +44,7 @@ if (isset($_SESSION['id']) && $_SESSION["time"] + 3600 > time()) {
 </head>
 <body class="auth-page">
     <header class="auth-header" style="display:flex; justify-content:center; align-items:center; flex-direction:column; margin-bottom: 40px;">
-        
+        <link rel="stylesheet" href="../style.css">
         <h1 style="margin: 0; font-size: 28px;">ホーム画面</h1>
     </header>
 
@@ -82,7 +82,8 @@ if (isset($_SESSION['id']) && $_SESSION["time"] + 3600 > time()) {
                         <td>
                             <a href="item_detail.php?id=<?php echo h($item['id']); ?>">
                                 <img src="..\images\items\default.png" alt="" width="150" height="150">
-                                <div><?php echo h($item['name']); ?></div>
+                                <div class="truncate-line"><?php
+                                 echo h($item["name"]); ?></div>
                                 <div>￥<?php echo h($item['price']); ?></div>
                             </a>
                         </td>
