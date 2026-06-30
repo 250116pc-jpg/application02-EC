@@ -1,37 +1,40 @@
 <?php
 session_start();
 require_once '../db.php';
+require_once '../funcs.php';
+
 $max_row = 10;
 $max_col = 5;
 $error = "";
 $pdo = getPdo();
 
 // 1. ログインチェック
-if (isset($_SESSION['id']) && $_SESSION["time"] + 3600 > time()) {
-    $_SESSION["time"] = time();
-    $id = $_SESSION['id'];
-    $stmt = $pdo->prepare('SELECT * FROM users WHERE id=?');
-    
-    $stmt->execute([$id]);
-    $member = $stmt->fetch();
+login_check();
+$id = $_SESSION['id'];
+$stmt = $pdo->prepare('SELECT * FROM users WHERE id=?');
 
-    $stmt = $pdo->prepare('SELECT * FROM items WHERE 1');
-    $stmt->execute();
+$stmt->execute([$id]);
+$member = $stmt->fetch();
+
+$stmt = $pdo->prepare('SELECT * FROM items WHERE 1');
+$stmt->execute();
+$items = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+#商品数
+$counts = $pdo->prepare('SELECT COUNT(*) AS cnt FROM items');
+$counts->execute();
+$counts = $counts->fetch();
+
+if(!empty($_GET["search"])){
+    $search = $_GET["search"];
+    $stmt = $pdo->prepare('SELECT * FROM items WHERE name LIKE ?');
+    $counts = $pdo->prepare('SELECT COUNT(*) AS cnt FROM items WHERE name LIKE ?');
+
+    $stmt->execute(["%$search%"]);
     $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    #商品数
-    $counts = $pdo->prepare('SELECT COUNT(*) AS cnt FROM items');
-    $counts->execute();
+    $counts->execute(["%$search%"]);
     $counts = $counts->fetch();
-
-   
-
-} else {
-    // ログインしてなければ戻す
-   
-
-    header('Location: login.php');
-    exit();
 }
 
 ?>
@@ -51,9 +54,9 @@ if (isset($_SESSION['id']) && $_SESSION["time"] + 3600 > time()) {
     <main class="auth-container">
         <section class="auth-card">
             
-            <form action="">
+            <form action="" method="GET">
 
-                <input type="text" placeholder="検索する">
+                <input type="text" name="search" value="<?php echo isset($search) ? h($search) : ''; ?>" placeholder="検索する">
                 <button type="submit"><img src="..\images\system\search.png" alt="送信" width="30" height="30"></button>
                 
             </form>

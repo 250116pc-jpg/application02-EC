@@ -1,7 +1,7 @@
 <?php
 session_start();
 $error = "";
-$registered = isset($_GET['registered']) && $_GET['registered'] == 1;
+
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $user_id = trim($_POST['user_id'] ?? '');
@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
                 
                 <div class="auth-links">
-                    <a href="..//home.php">ホーム画面へ</a>
+                    <a href="../home.php">ホーム画面へ</a>
                 </div>
             
             <p>
