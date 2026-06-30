@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once 'db.php';
+require_once '../db.php';
 $row = 5;
 $error = "";
 $registered = isset($_GET['registered']) && $_GET['registered'] == 1;
