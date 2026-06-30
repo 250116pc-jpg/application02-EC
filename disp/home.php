@@ -2,7 +2,7 @@
 session_start();
 require_once '../db.php';
 $row = 10;
-$col = 10;
+$col = 5;
 $error = "";
 
 
@@ -43,7 +43,13 @@ $error = "";
                 <tr>
                     <?php for ($j = 0; $j < $col; $j++) { ?>
                         <td>
-                            <a href="item_detail.php?id=<?php echo $i*$row+$j; ?>">はげ</a>
+                            
+                            <a href="item_detail.php?id=<?php echo $i*$col+$j; ?>">
+                                <img src="..\images\items\default.png" alt="" width="150" height="150">
+                                <div></div>
+                                <div>400円</div>
+                                
+                            </a>
                         </td>
                     <?php } ?>
                 </tr>
