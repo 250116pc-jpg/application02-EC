@@ -55,7 +55,7 @@ if ($user_id) {
             <div class="dots">・<br>・<br>・<br>・<br>・<br>・</div>
             
             <div class="auth-links" style="text-align: center;">
-                <a href="../home.php">ホーム画面へ</a>
+                <a href="home.php">ホーム画面へ</a>
             </div>
 
         </section>
