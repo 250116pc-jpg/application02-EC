@@ -1,14 +1,42 @@
 <?php
 session_start();
-require_once '../db.php';
+require('../db.php');
+
 $error = "";
-$registered = isset($_GET['registered']) && $_GET['registered'] == 1;
+// $registered = isset($_GET['registered']) && $_GET['registered'] == 1;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
 
     header('Location: home.php');
 }
+
+// ログアウト処理
+if (isset($_POST['logout'])) {
+  header("Location: logout.php");
+  exit();
+}
+$_REQUEST['pro_id']=1;
+// 取得
+$dates=$db->prepare('SELECT * FROM users WHERE id=?');
+$dates->execute(array($_REQUEST['pro_id']));
+$date=$dates->fetch();
+
+// 更新処理
+if (isset($_POST['change'])) {
+  $_SESSION['update']=$date['id'];
+  header("Location:account_update_check.php");
+  exit();
+}
+
+// アカウント削除処理
+if (isset($_POST['cancel'])) {
+  $_SESSION['cancel']=$date['id'];
+  header("Location: cancel_check.php");
+  exit();
+}
+
+
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -16,28 +44,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="utf-8">
     <title>アカウント情報画面</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="auth.css">
-    <link rel="icon" type="image/jpeg" href="favicon.jpg">
+    <!-- <link rel="icon" type="image/jpeg" href="favicon.jpg"> -->
 </head>
 <body class="auth-page">
-    <header class="auth-header" style="display:flex; justify-content:center; align-items:center; flex-direction:column; margin-bottom: 40px;">
-        <img src="logo.png" alt="Logo" style="height: 80px; width: auto; margin-bottom: 20px;">
-        <h1 style="margin: 0; font-size: 28px;">アカウント情報画面</h1>
+    <header>
+        <!-- <img src="logo.png" alt="Logo" style="height: 80px; width: auto; margin-bottom: 20px;"> -->
+        <h1>アカウント情報画面</h1>
+        <form action="" method="post"><input type="submit" name='logout' value="ログアウト" class='logout'></form>
     </header>
 
-    <main class="auth-container">
-        <section class="auth-card">
-            
-
-            
-
-            <div class="auth-links">
-                <a href="home.php">ホーム画面へ</a>
-            </div>
-            <div class="auth-links">
-                <a href="history.php">購入履歴画面へ</a>
-            </div>
-        </section>
+    <main>
+        <dl>
+          <dt>名前</dt>
+          <dd>
+            <?php echo h($date['name'],ENT_QUOTES);?>
+          </dd>
+          <dt>メールアドレス</dt>
+          <dd>
+            <?php echo h($date['email'],ENT_QUOTES);?>
+          </dd>
+          <dt>パスワード</dt>
+          <dd>........</dd>
+          <dt>住所</dt>
+          <dd>
+            <?php echo h($date['address'],ENT_QUOTES);?>
+          </dd>
+        </dl>
+        <form action="" method="post">
+          <input type="submit" name='change' value="更新する" class='change'>
+          <input type="submit" name='cancel' value="アカウント削除" class='cancel'>
+        </form>
     </main>
 </body>
 </html>
