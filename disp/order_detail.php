@@ -1,15 +1,21 @@
+
 <?php
 session_start();
 require_once '../db.php';
-$row = 5;
-$error = "";
-$registered = isset($_GET['registered']) && $_GET['registered'] == 1;
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $user_id = trim($_POST['user_id'] ?? '');
-    $password = $_POST['password'] ?? '';
+$order_id = $_GET['id'] ?? null;
+$order = null;
 
-    
+if ($order_id) {
+    try {
+        $pdo = getPdo();
+        // 
+        $stmt = $pdo->prepare("SELECT * FROM orders WHERE order_id = ?");
+        $stmt->execute([$order_id]);
+        $order = $stmt->fetch();
+    } catch (Exception $e) {
+        $error = "読み込みエラーが発生しました。";
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -29,26 +35,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <main class="auth-container">
         <section class="auth-card">
-            
+            <?php if ($order): ?>
+                <div class="detail-box">
+                    <div class="detail-item"><strong>注文ID:</strong> <?php echo htmlspecialchars($order['order_id']); ?></div>
+                    <div class="detail-item"><strong>注文日:</strong> <?php echo htmlspecialchars($order['created']); ?></div>
+                    <div class="detail-item"><strong>合計金額:</strong> ¥<?php echo number_format($order['price']); ?></div>
+                    <div class="detail-item"><strong>配送先:</strong> <?php echo htmlspecialchars($order['address']); ?></div>
+                </div>
 
-            <div>注文詳細</div>
-           
-            <form action="" method="post" class="auth-form">
-                <div class="auth-actions">
-                    <button type="submit" class="auth-btn btn-user">キャンセルする</button>
-                </div>
-            </form>
-            <p>
-                <div class="auth-links">
-                    <a href="history.php">購入履歴画面へ</a>
-                </div>
-            <p>
-            <p>
-                <div class="auth-links">
-                    <a href="home.php">ホーム画面へ</a>
-                </div>
-            <p>
-        
+                <form action="cancel_order_process.php" method="post">
+                    <input type="hidden" name="order_id" value="<?php echo htmlspecialchars($order['order_id']); ?>">
+                    <button type="submit" class="btn-cancel">キャンセルする</button>
+                </form>
+            <?php else: ?>
+                <p>注文が見つかりませんでした。</p>
+            <?php endif; ?>
+
+            <div class="auth-links" style="margin-top: 30px;">
+                <a href="history.php">購入履歴画面へ</a><br>
+                <a href="home.php">ホーム画面へ</a>
+            </div>
         </section>
     </main>
 </body>
