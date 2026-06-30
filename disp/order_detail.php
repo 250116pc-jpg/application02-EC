@@ -9,7 +9,7 @@ $order = null;
 if ($order_id) {
     try {
         $pdo = getPdo();
-        // 
+        
         $stmt = $pdo->prepare("SELECT * FROM orders WHERE order_id = ?");
         $stmt->execute([$order_id]);
         $order = $stmt->fetch();
