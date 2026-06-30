@@ -35,11 +35,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <a href="check.php">確認画面へ</a>
                 </div>
                 <div class="auth-links">
-                    <a href="cart.php">カート一覧画面へ</a>
+                    <a href="../cart.php">カート一覧画面へ</a>
                 </div>
                 
                 <div class="auth-links">
-                    <a href="home.php">ホーム画面へ</a>
+                    <a href="../home.php">ホーム画面へ</a>
                 </div>
             </p>
             <p>
