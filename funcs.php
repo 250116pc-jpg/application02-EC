@@ -10,7 +10,7 @@ function login_check(){
     // ログインしてなければ戻す
    
 
-    header('Location: login.php');
+    header('Location: disp/login.php');
     exit();
 }
 }
