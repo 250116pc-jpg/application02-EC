@@ -24,7 +24,12 @@ $error = "";
     <main class="auth-container">
         <section class="auth-card">
             
+            <form action="">
 
+                <input type="text" placeholder="検索する">
+                <button type="submit"><img src="..\images\system\search.png" alt="送信" width="30" height="30"></button>
+                
+            </form>
             
             <p>
                 <div class="auth-links">
