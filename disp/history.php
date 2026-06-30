@@ -1,15 +1,19 @@
 <?php
 session_start();
-require_once '../db.php';
-$row = 5;
-$error = "";
-$registered = isset($_GET['registered']) && $_GET['registered'] == 1;
+require_once '../db.php'; 
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $user_id = trim($_POST['user_id'] ?? '');
-    $password = $_POST['password'] ?? '';
+$user_id = $_SESSION['user_id'] ?? null;
 
-    
+$orders = [];
+if ($user_id) {
+    try {
+        $pdo = getPdo();
+        $stmt = $pdo->prepare("SELECT * FROM orders WHERE user_id = ? ORDER BY created DESC");
+        $stmt->execute([$user_id]);
+        $orders = $stmt->fetchAll();
+    } catch (Exception $e) {
+
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -30,22 +34,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <main class="auth-container">
         <section class="auth-card">
             
+            <div style="margin-bottom: 20px;">注文一覧</div>
 
-            <div>注文一覧</div>
-            <?php for ($i = 0; $i < $row; $i++) { ?>
-                <div>
-                    <a href="order_detail.php?id=<?php echo $i; ?>">注文<?php echo $i; ?></a>
-                </div>
-            <?php } ?>
+            <?php if (!empty($orders)): ?>
+                <?php foreach ($orders as $order): ?>
+                    <div class="order-block">
+                        <div class="order-info">
+                            注文日: <?php echo htmlspecialchars($order['created']); ?><br>
+                            価格: ¥<?php echo number_format($order['price']); ?><br>
+                            配送先: <?php echo htmlspecialchars($order['address']); ?>
+                        </div>
+                        <a href="order_detail.php?id=<?php echo $order['order_id']; ?>" class="btn-rebuy">再度購入</a>
+                        <a href="#" class="btn-cancel">キャンセル</a>
+                    </div>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <p>購入履歴はありません。</p>
+            <?php endif; ?>
 
+            <div class="dots">・<br>・<br>・<br>・<br>・<br>・</div>
             
-            <p>
-                <div class="auth-links">
-                    <a href="..//home.php">ホーム画面へ</a>
-                </div>
-            
-            <p>
-        
+            <div class="auth-links" style="text-align: center;">
+                <a href="../home.php">ホーム画面へ</a>
+            </div>
+
         </section>
     </main>
 </body>
