@@ -12,4 +12,6 @@ function getPdo()
 
     return $pdo;
 }
+function h($value){
+  return htmlspecialchars($value,ENT_QUOTES);
 ?>
