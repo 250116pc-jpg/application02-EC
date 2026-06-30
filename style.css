@@ -1,7 +1,7 @@
 .truncate-line {
 padding: 0px;
-  width: 150px;             /* 横幅を指定（はみ出させる基準） */
-  white-space: nowrap;      /* 文字を改行させずに1行にする */
-  overflow: hidden;         /* はみ出た部分を非表示にする */
-  text-overflow: ellipsis;  /* はみ出た末尾を「…」にする */
+  width: 150px;           
+  white-space: nowrap;      
+  overflow: hidden;         
+  text-overflow: ellipsis;  
 }
