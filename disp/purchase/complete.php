@@ -36,8 +36,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
             </p>
             <p>
-                
-                
                 <div class="auth-links">
                     <a href="..//home.php">ホーム画面へ</a>
                 </div>

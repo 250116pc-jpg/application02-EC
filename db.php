@@ -1,7 +1,7 @@
 <?php
 function getPdo()
 {
-    $dsn = 'mysql:dbname=yse_pos_db;host=localhost;charset=utf8mb4';
+    $dsn = 'mysql:dbname=tara_db;host=localhost;charset=utf8mb4';
     $user = 'root';
     $password = '';
 
