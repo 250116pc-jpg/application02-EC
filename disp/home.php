@@ -1,8 +1,8 @@
 <?php
 session_start();
 require_once '../db.php';
-$row = 10;
-$col = 5;
+$max_row = 10;
+$max_col = 5;
 $error = "";
 $pdo = getPdo();
 
@@ -14,6 +14,18 @@ if (isset($_SESSION['id']) && $_SESSION["time"] + 3600 > time()) {
     
     $stmt->execute([$id]);
     $member = $stmt->fetch();
+
+    $stmt = $pdo->prepare('SELECT * FROM items WHERE 1');
+    $stmt->execute();
+    $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    #商品数
+    $counts = $pdo->prepare('SELECT COUNT(*) AS cnt FROM items');
+    $counts->execute();
+    $counts = $counts->fetch();
+
+   
+
 } else {
     // ログインしてなければ戻す
    
@@ -61,17 +73,17 @@ if (isset($_SESSION['id']) && $_SESSION["time"] + 3600 > time()) {
                 </div>
             </p>
             <div>商品一覧</div>
-            <?php for ($i = 0; $i < $row; $i++) { ?>
+            <div>商品数<?php echo $counts["cnt"];?></div>
+
+            <?php foreach (array_chunk($items, $max_col) as $items_row) { ?>
                 <table>
                 <tr>
-                    <?php for ($j = 0; $j < $col; $j++) { ?>
+                    <?php foreach ($items_row as $item) { ?>
                         <td>
-                            
-                            <a href="item_detail.php?id=<?php echo $i*$col+$j; ?>">
+                            <a href="item_detail.php?id=<?php echo h($item['id']); ?>">
                                 <img src="..\images\items\default.png" alt="" width="150" height="150">
-                                <div></div>
-                                <div>400円</div>
-                                
+                                <div><?php echo h($item['name']); ?></div>
+                                <div>￥<?php echo h($item['price']); ?></div>
                             </a>
                         </td>
                     <?php } ?>
