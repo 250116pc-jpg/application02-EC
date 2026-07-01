@@ -2,8 +2,6 @@
 session_start();
 require('../db.php');
 
-$error = "";
-// $registered = isset($_GET['registered']) && $_GET['registered'] == 1;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
@@ -16,16 +14,23 @@ if (isset($_POST['logout'])) {
   header("Location: logout.php");
   exit();
 }
-$_REQUEST['pro_id']=1;
+
+// 戻る処理
+if (isset($_POST['return'])) {
+  header("Location: home.php");
+  exit();
+}
+
 // 取得
+$db=getPdo();
 $dates=$db->prepare('SELECT * FROM users WHERE id=?');
-$dates->execute(array($_REQUEST['pro_id']));
+$dates->execute(array($_SESSION['id']));
 $date=$dates->fetch();
 
 // 更新処理
 if (isset($_POST['change'])) {
   $_SESSION['update']=$date['id'];
-  header("Location:account_update_check.php");
+  header("Location:account_update.php");
   exit();
 }
 
@@ -48,6 +53,7 @@ if (isset($_POST['cancel'])) {
 </head>
 <body class="auth-page">
     <header>
+      <form action="" method="post"><input type="submit" name='return' value="戻る" class='return'></form>
         <!-- <img src="logo.png" alt="Logo" style="height: 80px; width: auto; margin-bottom: 20px;"> -->
         <h1>アカウント情報画面</h1>
         <form action="" method="post"><input type="submit" name='logout' value="ログアウト" class='logout'></form>
