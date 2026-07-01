@@ -3,7 +3,7 @@ session_start();
 require('../db.php');
 $db=getPdo();
 $error =[];
-
+$date=$_SESSION['update'];
 
 // 戻る処理
 if (isset($_POST['return'])) {
@@ -26,7 +26,7 @@ if (isset($_POST['check'])) {
         }
         
         // パスワードのエラー
-        if(!empty($_POST['password'])){
+        if(!empty($_POST['password']) && $_POST['password']!='・・・・・・・・'){
             if(strlen($_POST['password'])<8){
                 $error['password']='length';
             }
@@ -36,6 +36,20 @@ if (isset($_POST['check'])) {
             if($_POST['password2']==''){
                 $error['password2']='blank';
             }
+        }
+        
+        // 空のエラー
+        if($_POST['name']==''){
+                $error['name']='blank';
+        }
+        if($_POST['email']==''){
+                $error['email']='blank';
+        }
+        if($_POST['password']==''){
+                $error['password']='blank';
+        }
+        if($_POST['address']==''){
+                $error['address']='blank';
         }
 
     
@@ -73,6 +87,9 @@ if($_REQUEST['action']??''=='return'){
                 <dt>名前</dt>
                 <dd>
                     <input type='text' name='name' value="<?php echo h(($date['name']??''),ENT_QUOTES);?>">
+                    <?php if(($error['name']??'')=='blank'):?>
+                    <p class="error">*名前を入力してください</p>
+                    <?php endif;?>
                 </dd>
                 <dt>メールアドレス</dt>
                 <dd>
@@ -80,12 +97,18 @@ if($_REQUEST['action']??''=='return'){
                     <?php if(($error['email']??'')=='er'):?>
                     <p class="error">*このメールアドレスは既に登録されています</p>
                     <?php endif;?>
+                    <?php if(($error['email']??'')=='blank'):?>
+                    <p class="error">*メールアドレスを入力してください</p>
+                    <?php endif;?>
                 </dd>
                 <dt>パスワード</dt>
                 <dd>
-                    <input type='password' name='password'>
+                    <input type='password' name='password' value="<?php echo h(($date['password']??''),ENT_QUOTES);?>">
                     <?php if(($error['password']??'')=='length'):?>
                     <p class="error">*パスワードは8文字以上で入力してください</p>
+                    <?php endif;?>
+                    <?php if(($error['password']??'')=='blank'):?>
+                    <p class="error">*パスワードを入力してください</p>
                     <?php endif;?>
                 </dd>
                 <dt>パスワード(確認)</dt>
@@ -101,6 +124,9 @@ if($_REQUEST['action']??''=='return'){
                 <dt>住所</dt>
                 <dd>
                     <input type='text' name='address' value="<?php echo h(($date['address']??''),ENT_QUOTES);?>">
+                    <?php if(($error['address']??'')=='blank'):?>
+                    <p class="error">*住所を入力してくださいを入力してください</p>
+                    <?php endif;?>
                 </dd>
             </dl>
             <input type="submit" name='check' value="確認画面へ" class='check'>

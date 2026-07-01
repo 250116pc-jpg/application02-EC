@@ -4,11 +4,33 @@ require('../db.php');
 
 $date=$_SESSION['update_check'];
 
+
+$db=getPdo();
+$dates=$db->prepare('SELECT * FROM users WHERE id=?');
+$dates->execute(array($_SESSION['id']));
+$now_date=$dates->fetch();
+
 // 更新処理
-
-
-
-
+if(isset($_POST['change'])){
+    if($date['password']=='・・・・・・・・'){
+      $password=$now_date['password'];
+    }else{
+      $password=password_hash($date['password'], PASSWORD_DEFAULT);
+    }
+    $statement = $db->prepare('UPDATE users SET name=?, email=?, password=?, address=? WHERE id=?');
+    $statement->execute(array(
+        $date['name'],
+        $date['email'],
+        $password,
+        $date['address'],
+        $now_date['id']
+    ));
+    unset($_SESSION['update_check']);
+    unset($_SESSION['update']);
+    header("Location:acc_info.php");
+    exit();
+    
+}
 
 // 戻る処理
 if(isset($_POST['return'])){
@@ -35,7 +57,7 @@ if(isset($_POST['return'])){
           <dt>名前</dt>
           <dd>
             <?php 
-            if($date['name']==''){
+            if($date['name']==$now_date['name']){
               echo '変更なし';
             }else{
               echo h($date['name'],ENT_QUOTES);
@@ -44,7 +66,7 @@ if(isset($_POST['return'])){
           <dt>メールアドレス</dt>
           <dd>
            <?php 
-            if($date['email']==''){
+            if($date['email']==$now_date['email']){
               echo '変更なし';
             }else{
               echo h($date['email'],ENT_QUOTES);
@@ -52,7 +74,7 @@ if(isset($_POST['return'])){
           </dd>
           <dt>パスワード</dt>
           <dd> 
-            <?php if($date['password']==''){
+            <?php if($date['password']=='・・・・・・・・'){
                     echo '変更なし';
                   }else{
                     echo h($date['password'],ENT_QUOTES);
@@ -62,7 +84,7 @@ if(isset($_POST['return'])){
           <dt>住所</dt>
           <dd>
            <?php 
-            if($date['address']==''){
+            if($date['address']==$now_date['address']){
               echo '変更なし';
             }else{
               echo h($date['address'],ENT_QUOTES);
