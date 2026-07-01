@@ -1,6 +1,6 @@
 <?php
 session_start();
-$cart = $_SESSION['cart'] ?? []; 
+$cart = $_SESSION['items'] ?? []; 
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -27,8 +27,8 @@ $cart = $_SESSION['cart'] ?? [];
                     <?php if (!empty($cart)): ?>
                         <ul>
                             <?php foreach ($cart as $item): ?>
-                                <li><?php echo htmlspecialchars($item['item_name'], ENT_QUOTES, 'UTF-8'); ?> 
-                                    (¥<?php echo number_format($item['price']); ?> × <?php echo htmlspecialchars($item['order_count'], ENT_QUOTES, 'UTF-8'); ?>)</li>
+                                <li><?php echo htmlspecialchars($item['name'], ENT_QUOTES, 'UTF-8'); ?> 
+                                    (¥<?php echo number_format($item['price']); ?> × <?php echo htmlspecialchars($item['num'], ENT_QUOTES, 'UTF-8'); ?>)</li>
                             <?php endforeach; ?>
                         </ul>
                     <?php else: ?>
