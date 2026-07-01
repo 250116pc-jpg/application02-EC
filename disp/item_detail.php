@@ -80,9 +80,7 @@ if(!empty($_POST["item_id"])) {
 <head>
     <meta charset="utf-8">
     <title>商品詳細画面</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="auth.css">
-    <link rel="icon" type="image/jpeg" href="favicon.jpg">
+    
 </head>
 <body class="auth-page">
     <header class="auth-header" style="display:flex; justify-content:center; align-items:center; flex-direction:column; margin-bottom: 40px;">
