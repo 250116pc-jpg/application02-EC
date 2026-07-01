@@ -25,7 +25,21 @@ if(!empty($_REQUEST["id"])){
     $image = $item["image"];
     $description = $item["description"];
     $stock = $item["stock"];
-    $category = $item["category"];
+    $categories = [
+        "is_CD" => "CD",
+        "is_DVD_BD" => "DVD・Blu-ray",
+        "is_comic" => "コミック",
+        "is_novel" => "ノベル",
+        "is_goods" => "フィギュア・グッズ",
+        "is_game" => "ゲームソフト",
+    ];
+    $ca = [];
+    foreach ($categories as $key => $value){
+        if($item[$key]){
+            $ca[] = $value;
+        }
+        
+    }
     $release_date = $item["release_date"];
     $is_sale = $item["is_sale"];
     
@@ -102,7 +116,11 @@ if(!empty($_POST["item_id"])) {
             <div>商品詳細</div>
             <p>
                 <h1><?php echo $name; ?></h1>
-                <div>カテゴリー: <?php echo $category; ?></div>
+                <div>カテゴリー: <?php foreach($ca as $c){?> 
+                    <div><?php echo $c; ?> </div> 
+                     
+                    <?php } ?>
+                </div>
             </p>
             <div>
                 <img src="../images/items/<?php echo $image; ?>" alt="商品画像">
