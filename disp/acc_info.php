@@ -29,11 +29,12 @@ $date=$dates->fetch();
 
 // 更新処理
 if (isset($_POST['change'])) {
-  $_SESSION['update']=$date['id'];
+  $_SESSION['update']=$date;
+  $_SESSION['update']['password']='・・・・・・・・';
   header("Location:account_update.php");
   exit();
 }
-
+// 後でやる
 // アカウント削除処理
 if (isset($_POST['cancel'])) {
   $_SESSION['cancel']=$date['id'];
