@@ -25,10 +25,38 @@ $counts = $pdo->prepare('SELECT COUNT(*) AS cnt FROM items');
 $counts->execute();
 $counts = $counts->fetch();
 
-if(!empty($_GET["search"])){
-    $search = $_GET["search"];
-    $stmt = $pdo->prepare('SELECT * FROM items WHERE name LIKE ?');
-    $counts = $pdo->prepare('SELECT COUNT(*) AS cnt FROM items WHERE name LIKE ?');
+if(!empty($_GET)){
+    $search = $_GET["search"] ?? "";
+    $category = $_GET["category"];
+    
+    $c_text = [
+        2 => "is_CD",
+        3 => "is_DVD_BD",
+        4 => "is_comic",
+        6 => "is_novel",
+        7 => "is_goods",
+        8 => "is_game",
+    ];
+    if ($category == 1) {
+        $stmt = $pdo->prepare(
+            "SELECT * FROM items WHERE name LIKE ?"
+        );
+        
+        $counts = $pdo->prepare('SELECT COUNT(*) AS cnt FROM items WHERE name LIKE ?');
+        
+    } else {
+        $text = $c_text[$category];
+
+        $stmt = $pdo->prepare(
+            "SELECT * FROM items
+            WHERE name LIKE ?
+            AND $text = 1"
+        );
+        
+        $counts = $pdo->prepare("SELECT COUNT(*) AS cnt FROM items WHERE name LIKE ?
+            AND $text = 1");
+    }
+    
 
     $stmt->execute(["%$search%"]);
     $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -59,8 +87,17 @@ if(!empty($_GET["search"])){
                 <input type="text" name="search" value="<?php echo isset($search) ? h($search) : ''; ?>" placeholder="検索する">
                 <button type="submit"><img src="..\images\system\search.png" alt="送信" width="30" height="30"></button>
                 
-            </form>
             
+            カテゴリ<select name="category">
+                <option value="1" <?= (($_GET["category"] ?? "1") == "1") ? "selected" : "" ?>>すべて</option>
+                <option value="2" <?= (($_GET["category"] ?? "1") == "2") ? "selected" : "" ?>>CD</option>
+                <option value="3" <?= (($_GET["category"] ?? "1") == "3") ? "selected" : "" ?>>DVD・Blu-ray</option>
+                <option value="4" <?= (($_GET["category"] ?? "1") == "4") ? "selected" : "" ?>>コミック</option>
+                <option value="6" <?= (($_GET["category"] ?? "1") == "6") ? "selected" : "" ?>>ノベル</option>
+                <option value="7" <?= (($_GET["category"] ?? "1") == "7") ? "selected" : "" ?>>フィギュア・グッズ</option>
+                <option value="8" <?= (($_GET["category"] ?? "1") == "8") ? "selected" : "" ?>>ゲームソフト</option>
+            </select>
+            </form>
             <p>
                 <div class="auth-links">
                     <a href="acc_info.php">アカウント情報画面へ</a>
@@ -83,7 +120,7 @@ if(!empty($_GET["search"])){
                 <tr>
                     <?php foreach ($items_row as $item) { ?>
                         <td>
-                            <a href="item_detail.php?id=<?php echo h($item['id']); ?>">
+                            <a href="item_detail.php?id=<?php echo h($item['id']); ?> ">
                                 <img src="..\images\items\default.png" alt="" width="150" height="150">
                                 <div class="truncate-line"><?php
                                  echo h($item["name"]); ?></div>
