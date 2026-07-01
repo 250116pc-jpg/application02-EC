@@ -6,6 +6,10 @@ $error = "";
 login_check();
 $id = $_SESSION['id'];
 
+$pdo = getPdo();
+$stmt = $pdo->prepare('SELECT items FROM carts WHERE user_id=?');
+$stmt->execute([$id]);
+$now_cart = $stmt->fetch();
 
 $pdo = getPdo();
 $stmt = $pdo->prepare('SELECT items FROM carts WHERE user_id=?');
@@ -50,7 +54,7 @@ try {
     $error = "うーん";
 }
 //セッションにカート情報追加
-if(!empty($_POST)) {
+if(!empty($_POST["purchase"])) {
     $user_id = $_SESSION['id'];
     
     $_SESSION['price'] = 0;
@@ -63,8 +67,48 @@ if(!empty($_POST)) {
         
     }
     header('Location: purchase/purchase.php');
+    
     exit();
     
+}
+if(!empty($_POST["action"])) {
+    $item_id = $_POST["id"];
+    $user_id = $_SESSION['id'];
+    $value = $_POST["action"];
+    if ($user_id) {
+        try {
+            $pdo = getPdo();
+            $stmt = $pdo->prepare('SELECT items FROM carts WHERE user_id=?');
+            $stmt->execute([$user_id]);
+            $now_cart = $stmt->fetch();
+
+            if ($now_cart) {
+                $items = json_decode($now_cart['items'] ?? '{}', true) ?? [];
+                
+                if (isset($items[$item_id])) {
+                    $items[$item_id] = max($items[$item_id] + $value, 0);
+                } else {
+                   $error["no_item"] = "アイテムがカートに存在しません。";
+                   
+                }
+                $items_json = json_encode($items);
+                $stmt = $pdo->prepare("UPDATE carts SET items = ?, time = NOW() WHERE user_id = ?");
+                $stmt->execute([$items_json, $user_id]);
+                
+            } else {
+                
+                $error["cart"] = "カートが存在しません。";
+            }
+
+            
+            header('Location: cart.php');
+            exit();
+        } catch (PDOException $e) {
+            $error = "うーん";
+        }
+    }else{
+        header('Location: home.php');
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -84,7 +128,7 @@ if(!empty($_POST)) {
         <section class="auth-card">
             <p>
                 <div class="auth-links">
-                    <a href="item_detail.php">商品詳細画面へ</a>
+                    <a href="home.php">ホーム画面へ</a>
                 </div>
                 <div class="auth-links">
                     
@@ -95,19 +139,36 @@ if(!empty($_POST)) {
                     
                 </div>
                 
-                <div class="auth-links">
-                    <a href="home.php">ホーム画面へ</a>
-                </div>
+                
             </p>
             <div>カート内容</div>
             <?php foreach($items_info as $item){ ?>
                 <a href="item_detail.php?id=<?php echo h($item['id']); ?>">
                     <img src="..\images\items\default.png" alt="" width="150" height="150">
                     <div class="truncate-line"><?php
-                        echo h($item["name"]); ?>×<?php echo $item["num"] ?>
+                        echo h($item["name"]); ?>
                     </div>
                     <div>￥<?php echo h($item['price']); ?></div>
                 </a>
+                <div>
+                    <form action="" method="post">
+                        
+                        <input type="hidden" name="id" value="<?php echo h($item['id']); ?>">
+                        <button type="submit" name = "action" value="1">＋</button>
+                        <?php echo $item["num"] ?>
+                        <button type="submit" name = "action" value="-1">ー</button>
+
+                    </form>
+                </div>
+                <?php if(!empty($error["cart"])){ ?>
+                    <?php echo $error["cart"]?>
+                <?php }?>
+                <?php if(!empty($error["no_item"])){ ?>
+                    <?php echo $error["no_item"]?>
+                <?php }?>
+                <div>
+
+                </div>
             <?php };?>
             
         </section>
