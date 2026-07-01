@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.3
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost:3306
--- Generation Time: Jun 30, 2026 at 11:42 AM
--- Server version: 8.4.3
--- PHP Version: 8.3.30
+-- ホスト: 127.0.0.1
+-- 生成日時: 2026-07-01 15:19:18
+-- サーバのバージョン： 10.4.32-MariaDB
+-- PHP のバージョン: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,149 +18,154 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `tara_db`
+-- データベース: `tara_db`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `carts`
+-- テーブルの構造 `carts`
 --
 
 CREATE TABLE `carts` (
-  `user_id` int NOT NULL,
+  `user_id` int(11) NOT NULL,
   `items` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
-  `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ;
+  `time` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `carts`
+-- テーブルのデータのダンプ `carts`
 --
 
 INSERT INTO `carts` (`user_id`, `items`, `time`) VALUES
-(1, '{\"1\":1,\"3\":2,\"4\":1,\"5\":3}', '2026-06-30 11:41:57');
+(1, '{\"4\":2}', '2026-07-01 05:03:49');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `items`
+-- テーブルの構造 `items`
 --
 
 CREATE TABLE `items` (
-  `id` int NOT NULL,
-  `name` text COLLATE utf8mb4_general_ci NOT NULL,
-  `price` int NOT NULL,
-  `stock` int NOT NULL,
-  `image` text COLLATE utf8mb4_general_ci NOT NULL,
-  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `category` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `is_sale` int NOT NULL,
+  `id` int(11) NOT NULL,
+  `name` text NOT NULL,
+  `price` int(11) NOT NULL,
+  `stock` int(11) NOT NULL,
+  `image` text NOT NULL,
+  `description` text NOT NULL,
+  `is_CD` tinyint(1) NOT NULL,
+  `is_DVD_BD` tinyint(1) NOT NULL,
+  `is_comic` tinyint(1) NOT NULL,
+  `is_novel` tinyint(1) NOT NULL,
+  `is_goods` tinyint(1) NOT NULL,
+  `is_game` tinyint(1) NOT NULL,
+  `is_sale` int(11) NOT NULL,
   `release_date` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `items`
+-- テーブルのデータのダンプ `items`
 --
 
-INSERT INTO `items` (`id`, `name`, `price`, `stock`, `image`, `description`, `category`, `is_sale`, `release_date`) VALUES
-(1, '月光', 1400, 13, 'default.png', 'メディア掲載レビューほか\r\n{萌え}より{燃え}ゲーム・メーカーとして人気のニトロ・プラスの、大ヒットPCゲーム作品がOVAで登場。音楽を手がけるのは、PC版、PS2版でもお馴染みZIZZ#STUDIO。\r\n-- 内容（「CDジャーナル」データベースより）', 'CD', 1, '2026-06-30 09:36:03'),
-(2, '君が望む永遠 コンプリート DVD-BOX (全14話, 300分) きみがのぞむえいえん 君望 きみのぞ アニメ [DVD] [Import] [PAL, 再生環境をご確認ください]', 100, 2, 'default.png', '', 'DVD', 0, '2026-06-30 09:39:19'),
-(3, 'ef - the first tale.', 15000, 7, 'default.png', '18禁インタラクティブ・ノベル。現役の学生でありながら少女漫画家でもある広野紘。クリスマスの夜、彼は2人の少女と出会った。教会で誰かを待ち続けているという謎の女性・雨宮優子。ひったくりにバックを盗まれ、それを追いかけるために紘の自転車を奪った少女・宮村みやこ。\r\nその冬、紘は学業と作家・・・現実と夢のどちらを選ぶかという選択に揺れていた。なにものにも縛られず、自由に生きるみやこに惹かれていく紘。しかし、彼を見つめる少女が、もう1人いた。紘の幼なじみであり、妹のような存在でもある新藤景。小柄な身体にも関わらずバスケ部のレギュラー選手として活躍する彼女は、常に顔をあげ、前進し、みやことは別の道を紘に示していた。\r\n他愛ない学園生活のなかで触れあう、1人の少年と2人の少女。その関係は、やがて恋心へと移り変わってゆくが・・・その糸はひどくもつれていた。夢と現実の選択。2人の少女との関係。相対する2つの問題に、紘はひとつの答えをだす。\r\n原画は七尾奈留・がろあ、シナリオは御影・鏡遊が担当。\r\n審査番号:22880', 'DVD', 1, '2026-06-30 09:41:17'),
-(4, 'X', 6000, 75, 'default.png', '『カードキャプターさくら』などで知られるCLAMPの人気コミックをアニメ化したファンタジー。地球の運命を握る少年・神威をめぐる超能力者たちの戦いを描く。\r\n-- 内容（「DVD NAVIGATOR」データベースより）\r\n\r\n監督・脚本: りんたろう 原作: CLAMP 脚本: 渡辺麻実/大川七瀬 作画監督・キャラクターデザイン: 結城信輝 音楽: 清水靖晃 声の出演: 関智一/岩男潤子/成田剣/山寺宏一/篠原恵美/田中秀幸/小山茉美/野上ゆかな/宮崎一成/井上和彦/三石琴乃/松本梨香/中田譲治/古澤徹/関俊彦/高畑淳子/皆口裕子/池田昌子\r\n-- 内容（「CDジャーナル」データベースより）', 'DVD', 1, '2026-06-30 09:42:58'),
-(5, '月光', 1400, 13, 'default.png', 'メディア掲載レビューほか\r\n{萌え}より{燃え}ゲーム・メーカーとして人気のニトロ・プラスの、大ヒットPCゲーム作品がOVAで登場。音楽を手がけるのは、PC版、PS2版でもお馴染みZIZZ#STUDIO。\r\n-- 内容（「CDジャーナル」データベースより）', 'CD', 1, '2026-06-30 09:36:03'),
-(6, '君が望む永遠 コンプリート DVD-BOX (全14話, 300分) きみがのぞむえいえん 君望 きみのぞ アニメ [DVD] [Import] [PAL, 再生環境をご確認ください]', 100, 2, 'default.png', '', 'DVD', 1, '2026-06-30 09:39:19'),
-(7, 'ef - the first tale.', 15000, 7, 'default.png', '18禁インタラクティブ・ノベル。現役の学生でありながら少女漫画家でもある広野紘。クリスマスの夜、彼は2人の少女と出会った。教会で誰かを待ち続けているという謎の女性・雨宮優子。ひったくりにバックを盗まれ、それを追いかけるために紘の自転車を奪った少女・宮村みやこ。\r\nその冬、紘は学業と作家・・・現実と夢のどちらを選ぶかという選択に揺れていた。なにものにも縛られず、自由に生きるみやこに惹かれていく紘。しかし、彼を見つめる少女が、もう1人いた。紘の幼なじみであり、妹のような存在でもある新藤景。小柄な身体にも関わらずバスケ部のレギュラー選手として活躍する彼女は、常に顔をあげ、前進し、みやことは別の道を紘に示していた。\r\n他愛ない学園生活のなかで触れあう、1人の少年と2人の少女。その関係は、やがて恋心へと移り変わってゆくが・・・その糸はひどくもつれていた。夢と現実の選択。2人の少女との関係。相対する2つの問題に、紘はひとつの答えをだす。\r\n原画は七尾奈留・がろあ、シナリオは御影・鏡遊が担当。\r\n審査番号:22880', 'DVD', 1, '2026-06-30 09:41:17'),
-(8, 'X', 6000, 75, 'default.png', '『カードキャプターさくら』などで知られるCLAMPの人気コミックをアニメ化したファンタジー。地球の運命を握る少年・神威をめぐる超能力者たちの戦いを描く。\r\n-- 内容（「DVD NAVIGATOR」データベースより）\r\n\r\n監督・脚本: りんたろう 原作: CLAMP 脚本: 渡辺麻実/大川七瀬 作画監督・キャラクターデザイン: 結城信輝 音楽: 清水靖晃 声の出演: 関智一/岩男潤子/成田剣/山寺宏一/篠原恵美/田中秀幸/小山茉美/野上ゆかな/宮崎一成/井上和彦/三石琴乃/松本梨香/中田譲治/古澤徹/関俊彦/高畑淳子/皆口裕子/池田昌子\r\n-- 内容（「CDジャーナル」データベースより）', 'DVD', 1, '2026-06-30 09:42:58');
+INSERT INTO `items` (`id`, `name`, `price`, `stock`, `image`, `description`, `is_CD`, `is_DVD_BD`, `is_comic`, `is_novel`, `is_goods`, `is_game`, `is_sale`, `release_date`) VALUES
+(1, '月光', 1400, 13, 'default.png', 'メディア掲載レビューほか\r\n{萌え}より{燃え}ゲーム・メーカーとして人気のニトロ・プラスの、大ヒットPCゲーム作品がOVAで登場。音楽を手がけるのは、PC版、PS2版でもお馴染みZIZZ#STUDIO。\r\n-- 内容（「CDジャーナル」データベースより）', 1, 0, 0, 0, 0, 0, 1, '2026-06-30 09:36:03'),
+(2, '君が望む永遠 コンプリート DVD-BOX (全14話, 300分) きみがのぞむえいえん 君望 きみのぞ アニメ [DVD] [Import] [PAL, 再生環境をご確認ください]', 100, 2, 'default.png', '', 0, 1, 0, 0, 0, 0, 0, '2026-06-30 09:39:19'),
+(3, 'ef - the first tale.', 15000, 7, 'default.png', '18禁インタラクティブ・ノベル。現役の学生でありながら少女漫画家でもある広野紘。クリスマスの夜、彼は2人の少女と出会った。教会で誰かを待ち続けているという謎の女性・雨宮優子。ひったくりにバックを盗まれ、それを追いかけるために紘の自転車を奪った少女・宮村みやこ。\r\nその冬、紘は学業と作家・・・現実と夢のどちらを選ぶかという選択に揺れていた。なにものにも縛られず、自由に生きるみやこに惹かれていく紘。しかし、彼を見つめる少女が、もう1人いた。紘の幼なじみであり、妹のような存在でもある新藤景。小柄な身体にも関わらずバスケ部のレギュラー選手として活躍する彼女は、常に顔をあげ、前進し、みやことは別の道を紘に示していた。\r\n他愛ない学園生活のなかで触れあう、1人の少年と2人の少女。その関係は、やがて恋心へと移り変わってゆくが・・・その糸はひどくもつれていた。夢と現実の選択。2人の少女との関係。相対する2つの問題に、紘はひとつの答えをだす。\r\n原画は七尾奈留・がろあ、シナリオは御影・鏡遊が担当。\r\n審査番号:22880', 0, 1, 0, 0, 0, 1, 1, '2026-06-30 09:41:17'),
+(4, 'X', 6000, 75, 'default.png', '『カードキャプターさくら』などで知られるCLAMPの人気コミックをアニメ化したファンタジー。地球の運命を握る少年・神威をめぐる超能力者たちの戦いを描く。\r\n-- 内容（「DVD NAVIGATOR」データベースより）\r\n\r\n監督・脚本: りんたろう 原作: CLAMP 脚本: 渡辺麻実/大川七瀬 作画監督・キャラクターデザイン: 結城信輝 音楽: 清水靖晃 声の出演: 関智一/岩男潤子/成田剣/山寺宏一/篠原恵美/田中秀幸/小山茉美/野上ゆかな/宮崎一成/井上和彦/三石琴乃/松本梨香/中田譲治/古澤徹/関俊彦/高畑淳子/皆口裕子/池田昌子\r\n-- 内容（「CDジャーナル」データベースより）', 0, 1, 0, 0, 0, 0, 1, '2026-06-30 09:42:58'),
+(5, 'らき☆すた コミック 1-10巻セット', 2300, 5, 'default.png', '1-10巻のセット', 0, 0, 1, 0, 0, 0, 1, '2026-06-30 09:36:03'),
+(6, '【中古】 らき☆すた in 武道館 あなたのためだから 下巻 [レンタル落ち] [DVD] レンタル落ち 中古 DVD', 3600, 2, 'default.png', '・ジャケット(紙)\r\n・ディスク(不織布ケースにお入れいたします)\r\n・トールケースは付属しません。\r\n・トールケースをご希望の場合は、別売りのトールケースをご用意しております。ご検討ください。', 0, 1, 0, 0, 0, 0, 1, '2026-06-30 09:39:19'),
+(7, 'ツバサ コミック 全28巻 完結セット (少年マガジンコミックス)', 5000, 4, 'default.png', 'ツバサ 全 週刊マガジンＫＣ ＣＬＡＭＰ　講談社 少年コミック ツバサ　(1~28巻セット)', 0, 0, 1, 0, 0, 0, 1, '2026-06-30 09:41:17'),
+(8, '×××HOLiC コミック 全19巻 完結セット (KCデラックス)', 4500, 100, 'default.png', '×××ＨＯＬｉＣ 全 ＫＣＤＸ ＣＬＡＭＰ　講談社 青年コミック ×××ＨＯＬｉＣ　(1~19巻セット)', 0, 0, 1, 0, 0, 0, 1, '2026-06-30 09:42:58');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `orders`
+-- テーブルの構造 `orders`
 --
 
 CREATE TABLE `orders` (
-  `order_id` int NOT NULL,
-  `user_id` int NOT NULL,
+  `order_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
   `items` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
-  `pay` text COLLATE utf8mb4_general_ci NOT NULL,
-  `method` text COLLATE utf8mb4_general_ci NOT NULL,
-  `address` text COLLATE utf8mb4_general_ci NOT NULL,
+  `pay` text NOT NULL,
+  `method` text NOT NULL,
+  `address` text NOT NULL,
   `delivery_date` datetime NOT NULL,
   `created` datetime NOT NULL
-) ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `users`
+-- テーブルの構造 `users`
 --
 
 CREATE TABLE `users` (
-  `id` int NOT NULL,
-  `name` text COLLATE utf8mb4_general_ci NOT NULL,
-  `email` text COLLATE utf8mb4_general_ci NOT NULL,
-  `address` text COLLATE utf8mb4_general_ci NOT NULL,
-  `password` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `id` int(11) NOT NULL,
+  `name` text NOT NULL,
+  `email` text NOT NULL,
+  `address` text NOT NULL,
+  `password` varchar(100) NOT NULL,
   `created` datetime NOT NULL,
-  `datetime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `datetime` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `users`
+-- テーブルのデータのダンプ `users`
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `address`, `password`, `created`, `datetime`) VALUES
 (1, '中村伊安', '250116pc@yse-c.net', '地球', '$2y$10$XqAdoAkSuvi.cxGxTxjZEuR2K9M8ruEgnAlAvdyoCeNgZIsdnqDES', '2026-06-30 18:03:25', '2026-06-30 09:03:25');
 
 --
--- Indexes for dumped tables
+-- ダンプしたテーブルのインデックス
 --
 
 --
--- Indexes for table `carts`
+-- テーブルのインデックス `carts`
 --
 ALTER TABLE `carts`
   ADD PRIMARY KEY (`user_id`);
 
 --
--- Indexes for table `items`
+-- テーブルのインデックス `items`
 --
 ALTER TABLE `items`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `orders`
+-- テーブルのインデックス `orders`
 --
 ALTER TABLE `orders`
   ADD PRIMARY KEY (`order_id`);
 
 --
--- Indexes for table `users`
+-- テーブルのインデックス `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- ダンプしたテーブルの AUTO_INCREMENT
 --
 
 --
--- AUTO_INCREMENT for table `items`
+-- テーブルの AUTO_INCREMENT `items`
 --
 ALTER TABLE `items`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
--- AUTO_INCREMENT for table `orders`
+-- テーブルの AUTO_INCREMENT `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `order_id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `users`
+-- テーブルの AUTO_INCREMENT `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
