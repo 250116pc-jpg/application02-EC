@@ -27,9 +27,6 @@ if (isset($_POST['check'])) {
         
         // パスワードのエラー
         if(!empty($_POST['password']) && $_POST['password']!='・・・・・・・・'){
-            if(strlen($_POST['password'])<8){
-                $error['password']='length';
-            }
             if($_POST['password']!==$_POST['password2']){
                 $error['password2']='not';
             }
@@ -57,6 +54,7 @@ if (isset($_POST['check'])) {
 
     if(empty($error)){
         $_SESSION['update_check']=$_POST;
+        $_SESSION['update_check']['id']=$date['id'];
         header('location:account_update_check.php');
         exit();
     }
@@ -104,9 +102,6 @@ if($_REQUEST['action']??''=='return'){
                 <dt>パスワード</dt>
                 <dd>
                     <input type='password' name='password' value="<?php echo h(($date['password']??''),ENT_QUOTES);?>">
-                    <?php if(($error['password']??'')=='length'):?>
-                    <p class="error">*パスワードは8文字以上で入力してください</p>
-                    <?php endif;?>
                     <?php if(($error['password']??'')=='blank'):?>
                     <p class="error">*パスワードを入力してください</p>
                     <?php endif;?>

@@ -7,7 +7,7 @@ $date=$_SESSION['update_check'];
 
 $db=getPdo();
 $dates=$db->prepare('SELECT * FROM users WHERE id=?');
-$dates->execute(array($_SESSION['id']));
+$dates->execute(array($date['id']));
 $now_date=$dates->fetch();
 
 // 更新処理

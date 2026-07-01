@@ -37,8 +37,8 @@ if (isset($_POST['change'])) {
 // 後でやる
 // アカウント削除処理
 if (isset($_POST['cancel'])) {
-  $_SESSION['cancel']=$date['id'];
-  header("Location: cancel_check.php");
+  $_SESSION['account_delete']=$date['id'];
+  header("Location: account_delete.php");
   exit();
 }
 
@@ -50,12 +50,10 @@ if (isset($_POST['cancel'])) {
     <meta charset="utf-8">
     <title>アカウント情報画面</title>
     <link rel="stylesheet" href="style.css">
-    <!-- <link rel="icon" type="image/jpeg" href="favicon.jpg"> -->
 </head>
 <body class="auth-page">
     <header>
       <form action="" method="post"><input type="submit" name='return' value="戻る" class='return'></form>
-        <!-- <img src="logo.png" alt="Logo" style="height: 80px; width: auto; margin-bottom: 20px;"> -->
         <h1>アカウント情報画面</h1>
         <form action="" method="post"><input type="submit" name='logout' value="ログアウト" class='logout'></form>
     </header>
