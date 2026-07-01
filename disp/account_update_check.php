@@ -12,7 +12,7 @@ $now_date=$dates->fetch();
 
 // 更新処理
 if(isset($_POST['change'])){
-    if($date['password']==''){
+    if($date['password']=='・・・・・・・・'){
       $password=$now_date['password'];
     }else{
       $password=password_hash($date['password'], PASSWORD_DEFAULT);
@@ -31,9 +31,6 @@ if(isset($_POST['change'])){
     exit();
     
 }
-
-
-
 
 // 戻る処理
 if(isset($_POST['return'])){

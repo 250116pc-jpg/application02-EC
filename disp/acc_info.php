@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 // ここも後でやる
 // ログアウト処理
 if (isset($_POST['logout'])) {
-  header("Location: logout.php");
+  header("Location: login.php");
   exit();
 }
 
