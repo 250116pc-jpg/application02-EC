@@ -71,11 +71,11 @@ if(!empty($_POST["purchase"])) {
     exit();
     
 }
-if(!empty($_POST["action"])) {
+if(isset($_POST["action"])) {
     $item_id = $_POST["id"];
     $user_id = $_SESSION['id'];
     $value = $_POST["action"];
-    if ($user_id) {
+    if ($value!=0) {
         try {
             $pdo = getPdo();
             $stmt = $pdo->prepare('SELECT items FROM carts WHERE user_id=?');
@@ -86,7 +86,7 @@ if(!empty($_POST["action"])) {
                 $items = json_decode($now_cart['items'] ?? '{}', true) ?? [];
                 
                 if (isset($items[$item_id])) {
-                    $items[$item_id] = max($items[$item_id] + $value, 0);
+                    $items[$item_id] = max($items[$item_id] + $value, 1);
                 } else {
                    $error["no_item"] = "アイテムがカートに存在しません。";
                    
@@ -107,7 +107,36 @@ if(!empty($_POST["action"])) {
             $error = "うーん";
         }
     }else{
-        header('Location: home.php');
+        try {
+            $pdo = getPdo();
+            $stmt = $pdo->prepare('SELECT items FROM carts WHERE user_id=?');
+            $stmt->execute([$user_id]);
+            $now_cart = $stmt->fetch();
+
+            if ($now_cart) {
+                $items = json_decode($now_cart['items'] ?? '{}', true) ?? [];
+                
+                if (isset($items[$item_id])) {
+                    unset($items[$item_id]);
+                } else {
+                   $error["no_item"] = "アイテムがカートに存在しません。";
+                   
+                }
+                $items_json = json_encode($items);
+                $stmt = $pdo->prepare("UPDATE carts SET items = ?, time = NOW() WHERE user_id = ?");
+                $stmt->execute([$items_json, $user_id]);
+                
+            } else {
+                
+                $error["cart"] = "カートが存在しません。";
+            }
+
+            
+            header('Location: cart.php');
+            exit();
+        } catch (PDOException $e) {
+            $error = "うーん";
+        }
     }
 }
 ?>
@@ -157,7 +186,7 @@ if(!empty($_POST["action"])) {
                         <button type="submit" name = "action" value="1">＋</button>
                         <?php echo $item["num"] ?>
                         <button type="submit" name = "action" value="-1">ー</button>
-
+                        <button type="submit" name = "action" value="0">削除</button>
                     </form>
                 </div>
                 <?php if(!empty($error["cart"])){ ?>
