@@ -1,8 +1,21 @@
 <?php
 session_start();
-require('db.php');
+require('../db.php');
 
 $date=$_SESSION['update_check'];
+
+// 更新処理
+
+
+
+
+
+// 戻る処理
+if(isset($_POST['return'])){
+    header('location:account_update.php?action=rewrite');
+    exit();
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -21,11 +34,21 @@ $date=$_SESSION['update_check'];
         <dl>
           <dt>名前</dt>
           <dd>
-            <?php echo h($date['name'],ENT_QUOTES);?>
+            <?php 
+            if($date['name']==''){
+              echo '変更なし';
+            }else{
+              echo h($date['name'],ENT_QUOTES);
+            }?>
           </dd>
           <dt>メールアドレス</dt>
           <dd>
-            <?php echo h($date['email'],ENT_QUOTES);?>
+           <?php 
+            if($date['email']==''){
+              echo '変更なし';
+            }else{
+              echo h($date['email'],ENT_QUOTES);
+            }?>
           </dd>
           <dt>パスワード</dt>
           <dd> 
@@ -38,10 +61,16 @@ $date=$_SESSION['update_check'];
           </dd>
           <dt>住所</dt>
           <dd>
-            <?php echo h($date['address'],ENT_QUOTES);?>
+           <?php 
+            if($date['address']==''){
+              echo '変更なし';
+            }else{
+              echo h($date['address'],ENT_QUOTES);
+            }?>
           </dd>
         </dl>
         <form action="" method="post">
+        <input type="submit" name='return' value="戻る" class='return'>
           <input type="submit" name='change' value="更新する" class='change'>
         </form>
     </main>

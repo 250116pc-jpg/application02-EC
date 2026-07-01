@@ -1,62 +1,56 @@
 <?php
 session_start();
-require('db.php');
-
+require('../db.php');
+$db=getPdo();
 $error =[];
 
-$dates=$db->prepare('SELECT * FROM users WHERE id=?');
-$dates->execute(array($_SESSION['update']));
-$date=$dates->fetch();
 
 // 戻る処理
 if (isset($_POST['return'])) {
-  $_SESSION['return']=$date['id'];
   header("Location: acc_info.php");
   exit();
 }
 
 if (isset($_POST['check'])) {
-  if(!empty($_POST)){
-    // メールアドレスがすでに登録されているか
-    $mail = $_POST['email'];
-    $stmt = $db->prepare('SELECT COUNT(id) FROM users WHERE email = :mail');
-    $stmt->bindValue(':mail', $mail, PDO::PARAM_STR);
-    $stmt->execute();
-    $count = $stmt->fetchColumn();
-    if ($count > 1) {
-        $error['email'] = 'er';
-    }
-    // パスワードのエラー
-    if(!empty($_POST['password'])){
-        if(strlen($_POST['password'])<8){
-            $error['password']='length';
+    if(!empty($_POST)){
+        // メールアドレスがすでに登録されているか
+        if(!empty($_POST['email'])){
+            $mail = $_POST['email'];
+            $stmt = $db->prepare('SELECT COUNT(id) FROM users WHERE email = :mail');
+            $stmt->bindValue(':mail', $mail, PDO::PARAM_STR);
+            $stmt->execute();
+            $count = $stmt->fetchColumn();
+            if ($count > 1) {
+                $error['email'] = 'er';
+            }
         }
-        if($_POST['password']!==$_POST['password2']){
-            $error['password2']='not';
+        
+        // パスワードのエラー
+        if(!empty($_POST['password'])){
+            if(strlen($_POST['password'])<8){
+                $error['password']='length';
+            }
+            if($_POST['password']!==$_POST['password2']){
+                $error['password2']='not';
+            }
+            if($_POST['password2']==''){
+                $error['password2']='blank';
+            }
         }
-        if($_POST['password2']==''){
-            $error['password2']='blank';
-        }
-    }
 
-    if($_POST['name']==''){
-        $error['name']='blank';
-    }
-    if($_POST['email']==''){
-        $error['email']='blank';
-    }
-    if($_POST['address']==''){
-        $error['address']='blank';
-    }
     
-}
+    }
 
-if(empty($error)){
-    $_SESSION['update_check']=$_POST;
-    header('location:account_update.php');
-    exit();
-}
+    if(empty($error)){
+        $_SESSION['update_check']=$_POST;
+        header('location:account_update_check.php');
+        exit();
+    }
   
+}
+if($_REQUEST['action']??''=='return'){
+  $date=$_SESSION['update_check']??'';
+  $error['return']=true;
 }
 
 ?>
@@ -71,27 +65,20 @@ if(empty($error)){
     <header>
         <form action="" method="post"><input type="submit" name='return' value="戻る" class='return'></form>
         <h1>アカウント情報更新画面</h1>
-        <form action="" method="post"><input type="submit" name='logout' value="ログアウト" class='logout'></form>
     </header>
     <main>
-        <h3>更新する内容を入力してください</h3>
+        <h3>更新する箇所を入力してください</h3>
         <form action='' method='post'>
             <dl>
                 <dt>名前</dt>
                 <dd>
                     <input type='text' name='name' value="<?php echo h(($date['name']??''),ENT_QUOTES);?>">
-                    <?php if(($error['name']??'')=='blank'):?>
-                    <p class="error">*名前を入力してください</p>
-                    <?php endif;?>
                 </dd>
                 <dt>メールアドレス</dt>
                 <dd>
                     <input type='email' name='email' value="<?php echo h(($date['email']??''),ENT_QUOTES);?>">
                     <?php if(($error['email']??'')=='er'):?>
                     <p class="error">*このメールアドレスは既に登録されています</p>
-                    <?php endif;?>
-                    <?php if(($error['email']??'')=='blank'):?>
-                    <p class="error">*メールアドレスを入力してください</p>
                     <?php endif;?>
                 </dd>
                 <dt>パスワード</dt>
@@ -114,9 +101,6 @@ if(empty($error)){
                 <dt>住所</dt>
                 <dd>
                     <input type='text' name='address' value="<?php echo h(($date['address']??''),ENT_QUOTES);?>">
-                    <?php if(($error['address']??'')=='blank'):?>
-                    <p class="error">*住所を入力してください</p>
-                    <?php endif;?>
                 </dd>
             </dl>
             <input type="submit" name='check' value="確認画面へ" class='check'>
