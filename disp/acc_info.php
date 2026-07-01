@@ -8,7 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     header('Location: home.php');
 }
-
+// ここも後でやる
 // ログアウト処理
 if (isset($_POST['logout'])) {
   header("Location: logout.php");
